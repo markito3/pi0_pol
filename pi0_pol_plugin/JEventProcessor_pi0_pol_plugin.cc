@@ -6,12 +6,14 @@
 //
 
 #include "JEventProcessor_pi0_pol_plugin.h"
+using namespace std;
 using namespace jana;
 
 
 // Routine used to create our JEventProcessor
 #include <JANA/JApplication.h>
 #include <JANA/JFactory.h>
+#include <PID/DNeutralParticle.h>
 extern "C"{
 void InitPlugin(JApplication *app){
 	InitJANAPlugin(app);
@@ -81,6 +83,14 @@ jerror_t JEventProcessor_pi0_pol_plugin::evnt(JEventLoop *loop, int eventnumber)
 	//  ... fill historgrams or trees ...
 	// japp->RootUnLock();
 
+  cout << "hello" << endl;
+
+  vector<const DNeutralParticle*>neutrals;
+  loop->Get(neutrals);
+  for (unsigned int i=0;i<neutrals.size();i++){
+    DLorentzVector gam1=neutrals[i]->Get_Hypothesis(Gamma)->lorentzMomentum();
+    cout << i << endl;
+  }
 
 	return NOERROR;
 }
