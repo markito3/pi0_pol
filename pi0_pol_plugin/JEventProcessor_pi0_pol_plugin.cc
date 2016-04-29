@@ -52,6 +52,8 @@ jerror_t JEventProcessor_pi0_pol_plugin::init(void)
 	// japp->RootUnLock();
 	//
 
+  cout << "init called" << endl;
+
 	return NOERROR;
 }
 
@@ -69,21 +71,8 @@ jerror_t JEventProcessor_pi0_pol_plugin::brun(JEventLoop *eventLoop, int runnumb
 //------------------
 jerror_t JEventProcessor_pi0_pol_plugin::evnt(JEventLoop *loop, int eventnumber)
 {
-	// This is called for every event. Use of common resources like writing
-	// to a file or filling a histogram should be mutex protected. Using
-	// loop->Get(...) to get reconstructed objects (and thereby activating the
-	// reconstruction algorithm) should be done outside of any mutex lock
-	// since multiple threads may call this method at the same time.
-	// Here's an example:
-	//
-	// vector<const MyDataClass*> mydataclasses;
-	// loop->Get(mydataclasses);
-	//
-	// japp->RootWriteLock();
-	//  ... fill historgrams or trees ...
-	// japp->RootUnLock();
 
-  cout << "hello" << endl;
+  cout << "evnt called" << endl;
 
   vector<const DNeutralParticle*>neutrals;
   loop->Get(neutrals);
@@ -91,8 +80,8 @@ jerror_t JEventProcessor_pi0_pol_plugin::evnt(JEventLoop *loop, int eventnumber)
     DLorentzVector gam1=neutrals[i]->Get_Hypothesis(Gamma)->lorentzMomentum();
     cout << i << endl;
   }
-
-	return NOERROR;
+  
+  return NOERROR;
 }
 
 //------------------
@@ -112,6 +101,9 @@ jerror_t JEventProcessor_pi0_pol_plugin::erun(void)
 jerror_t JEventProcessor_pi0_pol_plugin::fini(void)
 {
 	// Called before program exit after event processing is finished.
-	return NOERROR;
+
+  cout << "fini called" << endl;
+
+  return NOERROR;
 }
 
