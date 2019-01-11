@@ -32,15 +32,16 @@ double func(double x, void *parameters) {
       y = -PI/x;
     }
   }
-
+#ifdef DEBUG
   printf("s = %f, mpi = %f, x = %f, arg = %f, y = %f\n", s, mpi, x, arg, y);
+#endif
   return y;
 }
 
 double eval(gsl_function func_in) {
   double x, y;
   void *params;
-  x=7.0;
+  x=0.5;
   params = func_in.params;
   y = func_in.function(x, params);
   return y;

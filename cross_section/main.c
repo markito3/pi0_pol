@@ -17,13 +17,13 @@ int main() {
   size_t n;
   int limit;
 
-  mpi = 135.0;
-  s = 4*mpi*mpi + .001 + 5000.;
+  mpi = 135.0d;
+  s = 4*mpi*mpi + .001d + 5000.0d;
 
   integrand.function = &func;
   params_in.s = s;
   params_in.mpi = mpi;
-  params_in.r_or_i = 1;
+  params_in.r_or_i = 0;
   integrand.params = &params_in;
 
   n = 1024*128;
@@ -33,8 +33,8 @@ int main() {
   z = eval(integrand);
   printf("z = %f\n", z);
 
-  a = 0.0;
-  b = 1.0;
+  a = 0.0d;
+  b = 1.0d;
   epsabs = 1.e-3;
   epsrel = 1.e-3;
   
