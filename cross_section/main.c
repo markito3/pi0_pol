@@ -38,12 +38,14 @@ int main() {
   epsabs = 1.e-3;
   epsrel = 1.e-3;
   
+  for (s = 4*mpi*mpi + .001d; s < 1000000.0d; s += 10000.0d) {
+    params_in.s = s;
   /*
   status = gsl_integration_qng(&integrand, a, b, epsabs, epsrel, &result, &abserr, &neval);
   */
-  status = gsl_integration_qag(&integrand, a, b, epsabs, epsrel, limit, GSL_INTEG_GAUSS15, workspace, &result, &abserr);
-  printf("result = %f, abserr = %f, neval = %d\n", result, abserr, neval);
-
+    status = gsl_integration_qag(&integrand, a, b, epsabs, epsrel, limit, GSL_INTEG_GAUSS15, workspace, &result, &abserr);
+    printf("s = %f, result = %f, abserr = %f, neval = %d\n", s, result, abserr, neval);
+  }
   gsl_integration_workspace_free(workspace);
 
   return 0;
