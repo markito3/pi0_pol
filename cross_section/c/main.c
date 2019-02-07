@@ -3,6 +3,8 @@
 
 #include "integrand.h"
 
+#define PI 3.14159265359
+
 int main() {
 
   gsl_function integrand;
@@ -10,7 +12,8 @@ int main() {
   double z;
   double s, s_out, mpi;
   double a, b, epsabs, epsrel;
-  double result, abserr, result_z[2];
+  double C1, C2;
+  double result, abserr, result_z[2], G_real, G_imag;
   size_t neval;
   int status;
   gsl_integration_workspace *workspace;
@@ -39,10 +42,12 @@ int main() {
   epsabs = 1.e-3;
   epsrel = 1.e-3;
 
+  C1 = -1.0d/(16.0d*PI*PI);
   out = fopen("integral.txt", "w");
   npoints = 0;
   for (s = 4*mpi*mpi + .001d; s < 1000000.0d; s += 10000.0d) {
     npoints++;
+    C2 = 2.0d*mpi*mpi/s;
     params_in.s = s;
     for (roi = 0; roi < 2; roi++) { 
       params_in.r_or_i = roi;
@@ -54,7 +59,9 @@ int main() {
       result_z[roi] = result; 
     }
     s_out = sqrt(s*1.0E-6);
-    fprintf(out, "%f %f %f\n", s_out, result_z[0], result_z[1]);
+    G_real = C1*(1.0d + C2*result_z[0]);
+    G_imag = C1*C2*result_z[1];
+    fprintf(out, "%f %f %f\n", s_out, G_real, G_imag);
   }
   printf("npoints = %d\n", npoints);
 
