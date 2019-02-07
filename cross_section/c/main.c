@@ -45,7 +45,7 @@ int main() {
   C1 = -1.0d/(16.0d*PI*PI);
   out = fopen("integral.txt", "w");
   npoints = 0;
-  for (s = 4*mpi*mpi + .001d; s < 1000000.0d; s += 10000.0d) {
+  for (s = 4*mpi*mpi + 100.0d; s < 1000000.0d; s += 10000.0d) {
     npoints++;
     C2 = 2.0d*mpi*mpi/s;
     params_in.s = s;
@@ -58,7 +58,7 @@ int main() {
       printf("npoints = %d, s = %f, roi = %d, result = %f, abserr = %f, neval = %d\n", npoints, s, roi, result, abserr, neval);
       result_z[roi] = result; 
     }
-    s_out = sqrt(s*1.0E-6);
+    s_out = s*1.0E-6;
     G_real = C1*(1.0d + C2*result_z[0]);
     G_imag = C1*C2*result_z[1];
     fprintf(out, "%f %f %f\n", s_out, G_real, G_imag);
