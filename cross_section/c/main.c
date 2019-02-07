@@ -35,7 +35,7 @@ int main() {
   workspace = gsl_integration_workspace_alloc(n);
 
   z = eval(integrand);
-  printf("z = %f\n", z);
+  printf("s = %f, z = %f\n", s, z);
 
   a = 0.0d;
   b = 1.0d;
