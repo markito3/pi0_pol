@@ -1,8 +1,11 @@
 all: hd_root.root
 
-hdgeant.hddm:
-	rm -fv run.mac ; \
-	echo /run/beamOn 10000 > run.mac ; \
+control.in: $(PI0_POL)/control.in
+	cp -pv $< .
+
+hdgeant.hddm: control.in
+	rm -fv run.mac
+	echo /run/beamOn 10000 > run.mac
 	hdgeant4 run.mac
 
 hdgeant_smeared.hddm: hdgeant.hddm
