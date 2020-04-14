@@ -1,3 +1,7 @@
+ifndef NEVENTS
+    NEVENTS=10000
+endif
+
 all: hd_root.root
 
 control.in: $(PI0_POL)/control.in
@@ -5,7 +9,7 @@ control.in: $(PI0_POL)/control.in
 
 hdgeant.hddm: control.in
 	rm -fv run.mac
-	echo /run/beamOn 10000 > run.mac
+	echo /run/beamOn $(NEVENTS) > run.mac
 	hdgeant4 run.mac
 
 hdgeant_smeared.hddm: hdgeant.hddm
