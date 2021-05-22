@@ -2,7 +2,12 @@ ifndef NEVENTS
     NEVENTS=10000
 endif
 
-all: hd_root.root
+all: env_check hd_root.root
+
+env_check:
+	@echo PI0_POL = $(PI0_POL)
+	@if [ -z $(PI0_POL) ]; then echo PI0_POL undefined; exit 1; fi
+	@if [ ! -d $(PI0_POL) ]; then echo directory PI0_POL does not exist; exit 2; fi
 
 control.in: $(PI0_POL)/control.in
 	cp -pv $< .
