@@ -1,8 +1,8 @@
 // $Id$
 //
 //    File: JEventProcessor_pi0_pol_plugin.h
-// Created: Thu Aug 27 15:53:07 EDT 2015
-// Creator: marki (on Linux ifarm1401 2.6.32-431.el6.x86_64 x86_64)
+// Created: Wed Jun 23 18:19:06 EDT 2021
+// Creator:  (on Linux markdesk5.itodomain 5.12.7-300.fc34.x86_64 x86_64)
 //
 
 #ifndef _JEventProcessor_pi0_pol_plugin_
@@ -18,8 +18,8 @@ class JEventProcessor_pi0_pol_plugin:public jana::JEventProcessor{
 
 	private:
 		jerror_t init(void);						///< Called once at program start.
-		jerror_t brun(jana::JEventLoop *eventLoop, int runnumber);	///< Called everytime a new run number is detected.
-		jerror_t evnt(jana::JEventLoop *eventLoop, int eventnumber);	///< Called every event.
+		jerror_t brun(jana::JEventLoop *eventLoop, int32_t runnumber);	///< Called everytime a new run number is detected.
+		jerror_t evnt(jana::JEventLoop *eventLoop, uint64_t eventnumber);	///< Called every event.
 		jerror_t erun(void);						///< Called everytime run number changes, provided brun has been called.
 		jerror_t fini(void);						///< Called after last event of last event source has been processed.
 };
