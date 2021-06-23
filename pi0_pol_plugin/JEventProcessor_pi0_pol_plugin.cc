@@ -1,8 +1,8 @@
 // $Id$
 //
 //    File: JEventProcessor_pi0_pol_plugin.cc
-// Created: Thu Aug 27 15:53:07 EDT 2015
-// Creator: marki (on Linux ifarm1401 2.6.32-431.el6.x86_64 x86_64)
+// Created: Wed Jun 23 18:19:06 EDT 2021
+// Creator:  (on Linux markdesk5.itodomain 5.12.7-300.fc34.x86_64 x86_64)
 //
 
 #include "JEventProcessor_pi0_pol_plugin.h"
@@ -43,16 +43,7 @@ JEventProcessor_pi0_pol_plugin::~JEventProcessor_pi0_pol_plugin()
 //------------------
 jerror_t JEventProcessor_pi0_pol_plugin::init(void)
 {
-	// This is called once at program startup. If you are creating
-	// and filling historgrams in this plugin, you should lock the
-	// ROOT mutex like this:
-	//
-	// japp->RootWriteLock();
-	//  ... fill historgrams or trees ...
-	// japp->RootUnLock();
-	//
-
-  cout << "init called" << endl;
+	// This is called once at program startup. 
 
 	return NOERROR;
 }
@@ -60,7 +51,7 @@ jerror_t JEventProcessor_pi0_pol_plugin::init(void)
 //------------------
 // brun
 //------------------
-jerror_t JEventProcessor_pi0_pol_plugin::brun(JEventLoop *eventLoop, int runnumber)
+jerror_t JEventProcessor_pi0_pol_plugin::brun(JEventLoop *eventLoop, int32_t runnumber)
 {
 	// This is called whenever the run number changes
 	return NOERROR;
@@ -69,19 +60,31 @@ jerror_t JEventProcessor_pi0_pol_plugin::brun(JEventLoop *eventLoop, int runnumb
 //------------------
 // evnt
 //------------------
-jerror_t JEventProcessor_pi0_pol_plugin::evnt(JEventLoop *loop, int eventnumber)
+jerror_t JEventProcessor_pi0_pol_plugin::evnt(JEventLoop *loop, uint64_t eventnumber)
 {
+	// This is called for every event. Use of common resources like writing
+	// to a file or filling a histogram should be mutex protected. Using
+	// loop->Get(...) to get reconstructed objects (and thereby activating the
+	// reconstruction algorithm) should be done outside of any mutex lock
+	// since multiple threads may call this method at the same time.
+	// Here's an example:
+	//
+	// vector<const MyDataClass*> mydataclasses;
+	// loop->Get(mydataclasses);
+	//
+	// japp->RootFillLock(this);
+	//  ... fill historgrams or trees ...
+	// japp->RootFillUnLock(this);
 
   cout << "evnt called" << endl;
-
   vector<const DNeutralParticle*>neutrals;
   loop->Get(neutrals);
   for (unsigned int i=0;i<neutrals.size();i++){
     DLorentzVector gam1=neutrals[i]->Get_Hypothesis(Gamma)->lorentzMomentum();
     cout << i << endl;
   }
-  
-  return NOERROR;
+
+	return NOERROR;
 }
 
 //------------------
@@ -101,9 +104,6 @@ jerror_t JEventProcessor_pi0_pol_plugin::erun(void)
 jerror_t JEventProcessor_pi0_pol_plugin::fini(void)
 {
 	// Called before program exit after event processing is finished.
-
-  cout << "fini called" << endl;
-
-  return NOERROR;
+	return NOERROR;
 }
 
