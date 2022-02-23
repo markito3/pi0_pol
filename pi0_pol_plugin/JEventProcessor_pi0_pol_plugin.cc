@@ -46,7 +46,9 @@ jerror_t JEventProcessor_pi0_pol_plugin::init(void)
   Int_t bins = 20;
   Double_t xlow = -0.5, xhigh = 19.5;
   file = new TFile("p0p.root", "RECREATE");
-  h1 = new TH1F("example_name", "example_title", bins, xlow, xhigh);
+  h1 = new TH1F("Nnc", "Neutral Particle Multiplicity", bins, xlow, xhigh);
+  bins = 50; xlow = 0; xhigh = 10.0;
+  h2 = new TH1F("example_name", "example_title", bins, xlow, xhigh);
   return NOERROR;
 }
 
@@ -81,9 +83,13 @@ jerror_t JEventProcessor_pi0_pol_plugin::evnt(JEventLoop *loop, uint64_t eventnu
   cout << "evnt called" << endl;
   vector<const DNeutralParticle*>neutrals;
   loop->Get(neutrals);
+  double E;
+  DLorentzVector gam;
   for (unsigned int i=0;i<neutrals.size();i++){
-    DLorentzVector gam1=neutrals[i]->Get_Hypothesis(Gamma)->lorentzMomentum();
-    cout << i << endl;
+    gam=neutrals[i]->Get_Hypothesis(Gamma)->lorentzMomentum();
+    E = gam.E();
+    cout << i << E << endl;
+    h2->Fill(E);
   }
   double di = (double)neutrals.size();
   h1->Fill(di);
