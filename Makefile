@@ -10,7 +10,7 @@ env_check:
 	@if [ ! -d $(PI0_POL) ]; then echo directory PI0_POL does not exist; exit 2; fi
 
 control.in: $(PI0_POL)/control.in
-	cp -pv $< .
+	cp -v $< .
 
 hdgeant.hddm: control.in
 	rm -fv run.mac
