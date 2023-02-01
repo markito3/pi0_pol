@@ -9,11 +9,11 @@
 using namespace std;
 using namespace jana;
 
-
 // Routine used to create our JEventProcessor
 #include <JANA/JApplication.h>
 #include <JANA/JFactory.h>
 #include <PID/DNeutralParticle.h>
+#include "TMath.h"
 extern "C"{
 void InitPlugin(JApplication *app){
   InitJANAPlugin(app);
@@ -48,7 +48,8 @@ jerror_t JEventProcessor_pi0_pol_plugin::init(void)
   file = new TFile("p0p.root", "RECREATE");
   h1 = new TH1F("Nnc", "Neutral Particle Multiplicity", bins, xlow, xhigh);
   bins = 50; xlow = 0; xhigh = 10.0;
-  h2 = new TH1F("example_name", "example_title", bins, xlow, xhigh);
+  h2 = new TH1F("neutral particle energy", "neutral particle energy", bins, xlow, xhigh);
+  h3 = new TH1F("two-photon mass", "two-photon mass", bins = 50, xlow = 0.0, xhigh = 1.0);
   return NOERROR;
 }
 
@@ -84,12 +85,22 @@ jerror_t JEventProcessor_pi0_pol_plugin::evnt(JEventLoop *loop, uint64_t eventnu
   vector<const DNeutralParticle*>neutrals;
   loop->Get(neutrals);
   double E;
-  DLorentzVector gam;
-  for (unsigned int i=0;i<neutrals.size();i++){
-    gam=neutrals[i]->Get_Hypothesis(Gamma)->lorentzMomentum();
-    E = gam.E();
-    cout << i << E << endl;
+  DLorentzVector gam1, gam2;
+  Double_t twoGammaMass;
+  unsigned int nneut = neutrals.size();
+  cout << "nneut = " << nneut << endl;
+  for (unsigned int i=0;i<nneut;i++){
+    gam1=neutrals[i]->Get_Hypothesis(Gamma)->lorentzMomentum();
+    E = gam1.E();
+    cout << "i = " << i << " E = " << E << endl;
     h2->Fill(E);
+    for (unsigned int j = i + 1; j < nneut; j++) {
+      cout << "i = " << i << " j = " << j << endl;
+      gam2=neutrals[j]->Get_Hypothesis(Gamma)->lorentzMomentum();
+      twoGammaMass = gam1*gam2;
+      cout <<"twoGammaMass = " << twoGammaMass << endl;
+      h3->Fill(TMath::Sqrt(twoGammaMass));
+    }
   }
   double di = (double)neutrals.size();
   h1->Fill(di);

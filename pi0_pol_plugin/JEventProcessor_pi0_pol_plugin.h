@@ -13,7 +13,7 @@
 #include <TH1F.h>
 
 static TFile* file;
-static TH1F *h1, *h2;
+static TH1F *h1, *h2, *h3;
 
 class JEventProcessor_pi0_pol_plugin:public jana::JEventProcessor{
 public:

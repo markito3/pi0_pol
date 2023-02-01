@@ -2,7 +2,7 @@ ifndef NEVENTS
     NEVENTS=10000
 endif
 
-all: env_check hd_root.root
+all: env_check hd_root.root p0p.root
 
 env_check:
 	@echo PI0_POL = $(PI0_POL)
@@ -20,7 +20,7 @@ hdgeant.hddm: control.in
 hdgeant_smeared.hddm: hdgeant.hddm
 	mcsmear hdgeant.hddm
 
-hd_root.root: hdgeant_smeared.hddm
+hd_root.root p0p.root: hdgeant_smeared.hddm
 	hd_root -PJANA:BATCH_MODE=1 -PPLUGINS=monitoring_hists,danarest,pi0_pol_plugin hdgeant_smeared.hddm
 
 clean:
